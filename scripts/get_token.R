@@ -1,4 +1,6 @@
 # henter et token - og efterlader "token" i environment
+# Levetiden af et token er '3600'. Hvis det er sekunder, er det en 
+# time, og det må være nok til de fleste forhold.
 library(tidyverse)
 library(httr)
 if(str_detect(here::here(), "Users/cbk")){
