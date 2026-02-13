@@ -9,9 +9,10 @@
 library(lubridate)
 library(httr)
 library(dplyr)
-  dato <- lubridate::today() %m-% lubridate::months(2)
-  dato <- as.character(dato)
-dato
+
+dato <- lubridate::today() %m-% months(24)
+ dato <- as.character(dato)
+
 
   url <- httr::modify_url(
     url = "https://kubkalender.kb.dk",
@@ -26,6 +27,20 @@ dato
 test_data <-   httr::GET(url, add_headers('Authorization' = paste("bearer", token))) |> 
     httr::content()
 
-length(test_data)
 
-test_data |> dplyr::bind_rows() 
+
+test_data |> dplyr::bind_rows() |> 
+slice_min(order_by=fromDate)
+  
+  summarise(min_from = min(fromDate),
+max_from = max(fromDate),
+min(toDate),
+max(toDate),
+min(created),
+max(created)) |> 
+  mutate(dato = dato)
+
+
+Den dato vi sætter, er datoen for fromDate.
+Med get_bookings henter vi bookinger. Vi angiver en dato, og vi får alle booking der starter den dag vi angiver.
+Vi starter med at gå tilpas langt tilbage. 
