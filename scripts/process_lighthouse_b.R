@@ -1,4 +1,4 @@
-source("get_token.R")
+source("scripts/get_token.R")
 
 
 # get_token ----
