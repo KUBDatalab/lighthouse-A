@@ -47,8 +47,7 @@ jobs:
         run: |
           Rscript scripts/process_lighthouse_b.R
 
-      - name: Commit & push 
-      changes to lighthouse-B
+      - name: Commit & push changes to lighthouse-B
         env:
           REPO_B_DIR: ${{ env.REPO_B_DIR }}
         run: |
