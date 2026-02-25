@@ -94,5 +94,3 @@ all_bookings |> dplyr::bind_rows() |> unnest(cols = c(bookId, id, eid, cid, lid,
   
 }
 
-test <- get_old_bookings(token)
-view(test)
