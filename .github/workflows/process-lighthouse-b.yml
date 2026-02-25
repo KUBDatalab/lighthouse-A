@@ -49,6 +49,8 @@ jobs:
           Rscript -e 'install.packages(c("googledrive", "googlesheets4", "httr", "ragg", "rvest"))'
           Rscript -e 'install.packages(c("readr","dplyr", "httr", "here", "tidyverse"), repos="https://cloud.r-project.org")'
       - name: Run R script from lighthouse-A
+        env: 
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET}}
         env:
           REPO_B_DIR: ${{ env.REPO_B_DIR }}
         run: |

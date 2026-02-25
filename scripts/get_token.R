@@ -7,6 +7,7 @@ library(stringr)
 if(stringr::str_detect(here::here(), "Users/B043487")){
   client_secret <- keyring::key_get("libcal")
 }else{
+  print("henter fra secrets i repo")
   client_secret <- Sys.getenv("CLIENT_SECRET")
 }
 
