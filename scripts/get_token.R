@@ -4,7 +4,7 @@
 library(tidyverse)
 library(httr)
 library(stringr)
-if(stringr::str_detect(here::here(), "Users/cbk")){
+if(stringr::str_detect(here::here(), "Users/B043487")){
   client_secret <- keyring::key_get("libcal")
 }else{
   client_secret <- Sys.getenv("CLIENT_SECRET")
@@ -13,7 +13,7 @@ if(stringr::str_detect(here::here(), "Users/cbk")){
 # Get token
 # returnerer et access-token. Tager client_secret som input.
 get_token <- function(client_secret){
-  token_endpoint <- "https://kubkalender.kb.dk/1.1/oauth/token"
+  token_endpoint <- "https://kubkalender.kb.dk/api/1.1/oauth/token"
   client_id <- "110"
   token <- httr::POST(token_endpoint,
                 body = list(grant_type = "client_credentials",
@@ -26,3 +26,4 @@ get_token <- function(client_secret){
 
 # get_token ----
 token <- get_token(client_secret = client_secret)
+
