@@ -20,6 +20,7 @@ get_token <- function(client_secret){
                             client_id = client_id,
                             client_secret = client_secret)) |> 
     httr::content() 
+  print(token)
   token[["access_token"]]
   
 }
