@@ -10,6 +10,8 @@ if(stringr::str_detect(here::here(), "Users/B043487")){
   client_secret <- Sys.getenv("CLIENT_SECRET")
 }
 
+print(client_secret)
+
 # Get token
 # returnerer et access-token. Tager client_secret som input.
 get_token <- function(client_secret){
