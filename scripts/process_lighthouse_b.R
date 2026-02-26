@@ -43,7 +43,7 @@ if(!file.exists(bookings_path)){
   bookings <- get_old_bookings(token)
   readr::write_csv(bookings, bookings_path)
 }else{
-  bookings <- readr::read_csv(bookingss_path, show_col_types = FALSE)
+  bookings <- readr::read_csv(bookings_path, show_col_types = FALSE)
   bookings <- bookings |> dplyr::mutate(processed_at = Sys.time())
   readr::write_csv(bookings, bookings_path)
 }
