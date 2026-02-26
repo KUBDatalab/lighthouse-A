@@ -1,13 +1,7 @@
-library(httr2)
-library(jsonlite)
-library(dplyr)
-library(tidyr)
-library(purrr)
-library(tibble)
-
+source("scripts/get_token.R")
 
 booking_id <- "218f95d7c697"
-token <- httr::get_token(client_secret = client_secret)
+token <- get_token(client_secret = client_secret)
 
 get_booking_details <- function(booking_id, token){
     base_url <- "https://kubkalender.kb.dk/1.1"
@@ -25,7 +19,7 @@ get_booking_details <- function(booking_id, token){
                     ) |>
             httr2::req_perform()
 
-    if (resp_status(resp) >= 400) {-
+    if (httr2::resp_status(resp) >= 400) {-
         stop(sprintf("HTTP %s\n%s", resp_status(resp), resp_body_string(resp)),
         call. = FALSE)
       }
@@ -33,14 +27,14 @@ get_booking_details <- function(booking_id, token){
     raw_json <- httr2::resp_body_string(resp)
 
     # 1) Parse med flatten=TRUE (giver ofte en pæn "bred" struktur med list-cols tilbage)
-    x <- fromJSON(raw_json, simplifyVector = TRUE, flatten = TRUE)
+    x <- jsonlite::fromJSON(raw_json, simplifyVector = TRUE, flatten = TRUE)
 
     # Sørg for at vi ender i en tibble (x kan være liste, df, eller liste med "booking"-felt)
     as_tbl <- function(obj) {
-                if (is.data.frame(obj)) return(as_tibble(obj))
-                if (is.list(obj) && length(obj) == 1 && is.data.frame(obj[[1]])) return(as_tibble(obj[[1]]))
-                if (is.list(obj)) return(tibble(data = list(obj)))  # fallback: 1 række med listekolonne
-              tibble(value = obj)
+                if (is.data.frame(obj)) return(tibble::as_tibble(obj))
+                if (is.list(obj) && length(obj) == 1 && is.data.frame(obj[[1]])) return(tibble::as_tibble(obj[[1]]))
+                if (is.list(obj)) return(tibble::tibble(data = list(obj)))  # fallback: 1 række med listekolonne
+              tibble::tibble(value = obj)
               }
 
     tbl <- as_tbl(x)
@@ -61,17 +55,17 @@ get_booking_details <- function(booking_id, token){
                             v <- df[[col]]
 
                             # tom / NULL -> drop kolonnen
-                            if (all(map_lgl(v, ~ is.null(.x) || (is.list(.x) && length(.x) == 0)))) {
-                            df <- df |> select(-all_of(col))
+                            if (all(purrr::map_lgl(v, ~ is.null(.x) || (is.list(.x) && length(.x) == 0)))) {
+                            df <- df |> dplyr::select(-all_of(col))
                             changed <- TRUE
                             next
                               }
 
       # Hvis cellerne er named lists (dvs. record/objekt), så unnest_wider
       is_named_record <- function(x) is.list(x) && length(x) > 0 && !is.null(names(x))
-      if (all(map_lgl(v, ~ is.null(.x) || is_named_record(.x)))) {
+      if (all(purrr::map_lgl(v, ~ is.null(.x) || is_named_record(.x)))) {
         df <- df |>
-          unnest_wider(all_of(col), names_sep = ".")
+          tidyr::unnest_wider(all_of(col), names_sep = ".")
         changed <- TRUE
         next
       }
@@ -80,7 +74,7 @@ get_booking_details <- function(booking_id, token){
       is_list_of_records <- function(x) {
         is.list(x) && length(x) > 0 && all(map_lgl(x, ~ is.null(.x) || is_named_record(.x)))
       }
-      if (any(map_lgl(v, is_list_of_records))) {
+      if (any(purrr::map_lgl(v, is_list_of_records))) {
         df <- df |>
           tidyr::unnest_longer(all_of(col), keep_empty = TRUE) |>
           tidyr::unnest_wider(all_of(col), names_sep = ".")
@@ -90,9 +84,9 @@ get_booking_details <- function(booking_id, token){
 
       # Hvis cellerne er lister af atomics (array af værdier), så unnest_longer
       is_list_of_atomic <- function(x) {
-        is.list(x) && length(x) > 0 && all(map_lgl(x, ~ is.atomic(.x) && length(.x) == 1))
+        is.list(x) && length(x) > 0 && all(purrr::map_lgl(x, ~ is.atomic(.x) && length(.x) == 1))
       }
-      if (any(map_lgl(v, is_list_of_atomic))) {
+      if (any(purrr::map_lgl(v, is_list_of_atomic))) {
         df <- df |> tidyr::unnest_longer(all_of(col), keep_empty = TRUE)
         changed <- TRUE
         next
@@ -108,8 +102,3 @@ get_booking_details <- function(booking_id, token){
 
 unnest_everything(tbl)
 }
-
-
-
-
-
