@@ -1,11 +1,3 @@
-library(httr2)
-library(lubridate)
-library(purrr)
-library(dplyr)
-library(tibble)
-
-
-
 get_old_bookings <- function(token){
 
 dato <- as.character(lubridate::today() %m-% months(36))
