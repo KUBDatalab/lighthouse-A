@@ -1,11 +1,3 @@
-library(httr2)
-library(lubridate)
-library(purrr)
-library(dplyr)
-library(tibble)
-
-
-
 get_old_bookings <- function(token){
 
 dato <- as.character(lubridate::today() %m-% months(36))
@@ -22,10 +14,10 @@ fetch_space_bookings_all <- function(
   verbose = TRUE
 ) {
 
-  req0 <- request(base_url) |>
-    req_url_path_append("1.1", "space", "bookings") |>
-    req_headers(Authorization = paste("bearer", token)) |>
-    req_url_query(
+  req0 <- httr2::request(base_url) |>
+    httr2::req_url_path_append("1.1", "space", "bookings") |>
+    httr2::req_headers(Authorization = paste("bearer", token)) |>
+    httr2::req_url_query(
       lid = lid,
       date = date,
       days = days,
@@ -42,11 +34,11 @@ fetch_space_bookings_all <- function(
     if (verbose) message("Henter page=", page)
 
     resp <- req0 |>
-      req_url_query(page = page) |>
-      req_perform() |>
-      resp_check_status()
+      httr2::req_url_query(page = page) |>
+      httr2::req_perform() |>
+      httr2::resp_check_status()
 
-    items <- resp_body_json(resp, simplifyVector = FALSE)
+    items <- httr2::resp_body_json(resp, simplifyVector = FALSE)
 
     n <- length(items)
     if (n == 0) break
@@ -58,7 +50,7 @@ fetch_space_bookings_all <- function(
     page <- page + 1L
   }
 
-  all_items <- list_flatten(pages)
+  all_items <- purrr::list_flatten(pages)
 
   # ---- HER håndteres NULL korrekt ----
 
@@ -86,13 +78,14 @@ fetch_space_bookings_all <- function(
 all_bookings <- fetch_space_bookings_all(token = token)
 
 
-all_bookings |> dplyr::bind_rows() |> unnest(cols = c(bookId, id, eid, cid, lid, fromDate, toDate, q1752, q1753, created, firstName, lastName, email,
+all_bookings |> dplyr::bind_rows() |> 
+  tidyr::unnest(cols = c(bookId, id, eid, cid, lid, fromDate, toDate, q1752, q1753, created, firstName, lastName, email,
    account, status, location_name, cancelled, check_in_status, nickname, category_name, item_name)) |> 
- unnest_wider(event, names_sep  = "_") |> 
-  unnest(internal_notes, keep_empty = TRUE) |> 
- unnest_wider(internal_notes, names_sep = "_") 
+  tidyr::unnest_wider(event, names_sep  = "_") |> 
+  tidyr::unnest(internal_notes, keep_empty = TRUE) |> 
+  tidyr::unnest_wider(internal_notes, names_sep = "_") 
   
 }
 
 test <- get_old_bookings(token)
-view(test)
+
