@@ -60,6 +60,10 @@ jobs:
         run: |
           Rscript scripts/process_lighthouse_b.R
 
+      - name: Render Quarto document
+        run: |
+          quarto render report.qmd
+          
       - name: Commit & push changes to lighthouse-B
         env:
           REPO_B_DIR: ${{ env.REPO_B_DIR }}
