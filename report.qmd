@@ -1,8 +1,15 @@
----
-title: "Untitled"
-format: html
----
 
+---
+title: "Kalender"
+format:
+  html:
+    toc: false
+    include-in-header:
+      - text: |
+          <style>
+            #calendar { max-width: 1200px; margin: 0 auto; }
+          </style>
+---
 
 ```{r}
 library(readr)
@@ -11,33 +18,12 @@ library(lubridate)
 library(jsonlite)
 
 repo_b_dir <- Sys.getenv("REPO_B_DIR", unset = NA_character_)
-if (is.na(repo_b_dir) || repo_b_dir == "") {
-  stop("REPO_B_DIR is not set")
-}
+if (is.na(repo_b_dir) || repo_b_dir == "") stop("REPO_B_DIR is not set")
 
-
-# Eksempel: fil i lighthouse-B
-input_path <- file.path(repo_b_dir, "data", "input.csv")
 bookings_path <- file.path(repo_b_dir, "data", "bookings.csv")
-bookings_details_path <- file.path(repo_b_dir, "data", "bookings_details.csv")
-```
 
+df <- read_csv(bookings_path, show_col_types = FALSE)
 
-```{r}
-df <- readr::read_csv(bookings_path, show_col_types = FALSE) |> 
-    dplyr::select(bookId:toDate)
-```
-
-
-
-
-```{r}
-
-
-# Læs data (tilpas filnavn hvis nødvendigt)
-
-
-#Parse datoer (DK-tid)
 events <- df |>
   mutate(
     start = ymd_hms(fromDate, tz = "Europe/Copenhagen"),
@@ -52,20 +38,25 @@ events <- df |>
   )
 
 events_json <- toJSON(events, auto_unbox = TRUE, dataframe = "rows")
-events_json
 ```
 
-<div id="calendar" style="max-width: 1200px; margin: 0 auto;"></div>
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+cat('<script id="events-data" type="application/json">')
+cat(events_json)
+cat('</script>')
+```
+
+<div id="calendar"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.20/index.global.min.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const calendarEl = document.getElementById('calendar');
+document.addEventListener('DOMContentLoaded', function () {
+  const el = document.getElementById('calendar');
+  const raw = document.getElementById('events-data').textContent;
+  const events = JSON.parse(raw);
 
-  const events = JSON.parse(document.querySelector('pre code').innerText);
-
-  const calendar = new FullCalendar.Calendar(calendarEl, {
+  const cal = new FullCalendar.Calendar(el, {
     initialView: 'timeGridWeek',
     nowIndicator: true,
     firstDay: 1,
@@ -78,6 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
     events: events
   });
 
-  calendar.render();
+  cal.render();
 });
 </script>
