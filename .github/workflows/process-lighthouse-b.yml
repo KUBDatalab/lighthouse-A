@@ -16,11 +16,10 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y \ 
-            pandoc \
-            libcurl4-openssl-dev \
-            libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev \
-            libfontconfig1-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev 
+          sudo apt-get install -y pandoc 
+          sudo apt-get install -y libcurl4-openssl-dev 
+          sudo apt-get install -y libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev 
+          sudo apt-get install -y libfontconfig1-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev
 
       - name: Checkout lighthouse-A
         uses: actions/checkout@v4
