@@ -1,0 +1,9 @@
+[
+  {
+    "objectID": "report.html",
+    "href": "report.html",
+    "title": "Untitled",
+    "section": "",
+    "text": "library(readr)\n\nWarning: package 'readr' was built under R version 4.5.2\n\nlibrary(dplyr)\n\nWarning: package 'dplyr' was built under R version 4.5.2\n\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n\nlibrary(lubridate)\n\nWarning: package 'lubridate' was built under R version 4.5.2\n\n\n\nAttaching package: 'lubridate'\n\n\nThe following objects are masked from 'package:base':\n\n    date, intersect, setdiff, union\n\nlibrary(jsonlite)\n\nWarning: package 'jsonlite' was built under R version 4.5.2\n\n# repo_b_dir &lt;- Sys.getenv(\"REPO_B_DIR\", unset = NA_character_)\n# if (is.na(repo_b_dir) || repo_b_dir == \"\") {\n#   stop(\"REPO_B_DIR is not set\")\n# }\n\n\n# # Eksempel: fil i lighthouse-B\n# input_path &lt;- file.path(repo_b_dir, \"data\", \"input.csv\")\n# bookings_path &lt;- file.path(repo_b_dir, \"data\", \"bookings.csv\")\n# bookings_details_path &lt;- file.path(repo_b_dir, \"data\", \"bookings_details.csv\")\n\n\n# df &lt;- readr::read_csv(bookings_path, show_col_types = FALSE) |&gt; \n#     dplyr::select(bookId:toDate)\n\n\n# Læs data (tilpas filnavn hvis nødvendigt)\n\n\n# Parse datoer (DK-tid)\n# events &lt;- df |&gt;\n#   mutate(\n#     start = ymd_hms(fromDate, tz = \"Europe/Copenhagen\"),\n#     end   = ymd_hms(toDate,   tz = \"Europe/Copenhagen\"),\n#     title = paste0(\"lid=\", lid, \" · cid=\", cid, \" · eid=\", eid)\n#   ) |&gt;\n#   transmute(\n#     title = title,\n#     start = format(start, \"%Y-%m-%dT%H:%M:%S\"),\n#     end   = format(end,   \"%Y-%m-%dT%H:%M:%S\"),\n#     id    = bookId\n#   )\n\n# events_json &lt;- toJSON(events, auto_unbox = TRUE, dataframe = \"rows\")\n# events_json"
+  }
+]

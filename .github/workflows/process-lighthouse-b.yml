@@ -62,8 +62,8 @@ jobs:
 
       - name: Render Quarto document
         run: |
-          quarto render report.qmd
-          
+          quarto render
+
       - name: Commit & push changes to lighthouse-B
         env:
           REPO_B_DIR: ${{ env.REPO_B_DIR }}
