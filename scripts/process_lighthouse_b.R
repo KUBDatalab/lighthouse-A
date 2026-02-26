@@ -18,9 +18,6 @@ input_path <- file.path(repo_b_dir, "data", "input.csv")
 bookings_path <- file.path(repo_b_dir, "data", "bookings.csv")
 bookings_details_path <- file.path(repo_b_dir, "data", "bookings_details.csv")
 
-library(readr)
-library(dplyr)
-
 print(input_path)
 print(bookings_path)
 print(bookings_details_path)
@@ -32,7 +29,8 @@ if(!file.exists(input_path)) {
 }else{
   df <- readr::read_csv(input_path, show_col_types = FALSE)
   # ---- DINE TRANSFORMATIONER ----
-  df <- df |> dplyr::mutate(processed_at = Sys.time())
+  df <- df |> 
+    dplyr::mutate(processed_at = Sys.time())
 
   # Skriv direkte tilbage til lighthouse-B
   readr::write_csv(df, input_path)
@@ -44,7 +42,8 @@ if(!file.exists(bookings_path)){
   readr::write_csv(bookings, bookings_path)
 }else{
   bookings <- readr::read_csv(bookings_path, show_col_types = FALSE)
-  bookings <- bookings |> dplyr::mutate(processed_at = Sys.time())
+  bookings <- bookings |> 
+    dplyr::mutate(processed_at = Sys.time())
   readr::write_csv(bookings, bookings_path)
 }
 
