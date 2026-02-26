@@ -40,7 +40,7 @@ if(!file.exists(input_path)) {
 
 # lille forsøg med bookings_path
 if(!file.exists(bookings_path)){
-  bookings <- mtcars
+  bookings <- get_old_bookings(token)
   readr::write_csv(bookings, bookings_path)
 }else{
   bookings <- readr::read_csv(bookingss_path, show_col_types = FALSE)
