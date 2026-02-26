@@ -41,6 +41,6 @@ max(created)) |>
   mutate(dato = dato)
 
 
-Den dato vi sætter, er datoen for fromDate.
-Med get_bookings henter vi bookinger. Vi angiver en dato, og vi får alle booking der starter den dag vi angiver.
-Vi starter med at gå tilpas langt tilbage. 
+# Den dato vi sætter, er datoen for fromDate.
+# Med get_bookings henter vi bookinger. Vi angiver en dato, og vi får alle booking der starter den dag vi angiver.
+# Vi starter med at gå tilpas langt tilbage. 
