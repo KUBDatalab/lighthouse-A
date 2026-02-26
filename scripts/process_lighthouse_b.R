@@ -27,7 +27,7 @@ print(bookings_details_path)
 
 # Behandler input_path - som ikke er så relevant for noget, men 
 # som vi beholder som eksempel på noget der virker.
-if (!file.exists(input_path)) {
+if(!file.exists(input_path)) {
   stop("File not found: ", input_path) # her skal vi ikke stoppe - vi skal generere den første fil
 }else{
   df <- readr::read_csv(input_path, show_col_types = FALSE)
@@ -38,6 +38,15 @@ if (!file.exists(input_path)) {
   readr::write_csv(df, input_path)
 }
 
+# lille forsøg med bookings_path
+if(!file.exists(bookings_path)){
+  bookings <- mtcars
+  readr::write_csv(bookings, bookings_path)
+}else{
+  bookings <- readr::read_csv(bookingss_path, show_col_types = FALSE)
+  bookings <- bookings |> dplyr::mutate(processed_at = Sys.time())
+  readr::write_csv(bookings, bookings_path)
+}
 
 # Her behandler vi de rå bookingsdata
 # if (!file.exists(bookings_path)) {
